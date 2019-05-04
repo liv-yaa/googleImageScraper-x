@@ -1,0 +1,5 @@
+notes.txt
+secrets.sh
+env
+*pyc*
+*pycache*

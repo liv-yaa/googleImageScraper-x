@@ -13,5 +13,14 @@ Points would be awarded on coding style, commenting and a documentation of execu
 
 
 """
-
+import os
 import requests
+# import beautifulsoup
+
+
+# If we need a key?
+KEY = os.environ["KEY"]
+# clarifai_app = ClarifaiApp(api_key=CLARAFAI_KEY) # move this
+
+
+print(KEY)
