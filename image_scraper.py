@@ -20,40 +20,48 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd # To create dataframe
 
+class ImageScraper:
+    def __init__(self, args):
+        self.args = args
+        print('Initialized ImageScraper')
+        # pass
 
-def process_input():
-    """
-    Helper function that takes command line arguments from user
-    @return arguments a list of arguments
+    def process_input(self):
+        """
+        Helper function that takes command line arguments from user
+        @return arguments a list of arguments
 
-    TODO - input validation?
-    """
+        TODO - input validation?
+        """
 
-    while True:
+        while True:
 
-        try:
-            arguments = sys.argv[1:]
+            try:
+                arguments = self.args[1:]
 
-            keyword = str(arguments[0])
-            n_items = int(arguments[1])
+                keyword = str(arguments[0])
+                n_items = int(arguments[1])
 
-            return [keyword, n_items]
+                return [keyword, n_items]
 
-        except IndexError:
-            print('Please enter command with 4 args: \
-                \'python3 image_scraper.py \'keyword(s)\' \'number_of_items\'')
-            sys.exit(1)
+            except IndexError:
+                print('Please enter command with 4 args: \
+                    \'python3 image_scraper.py \'keyword(s)\' \'number_of_items\'')
+                sys.exit(1)
 
-        except ValueError:
-            print('Second argument n_items must be an integer')
-            sys.exit(1)
+            except ValueError:
+                print('Second argument n_items must be an integer')
+                sys.exit(1)
 
 
-        # return False
+            # return False
+
 
 
 def main():
-    arguments = process_input()
+    # args = sys.argv
+    imgScraper = ImageScraper(args=sys.argv)
+    arguments = imgScraper.process_input()
 
     for arg in arguments:
         print(arg)
