@@ -5,10 +5,13 @@ Integration Tests
 
 
 """
+# Do we need to import os?
 
-import server
-import unittest 
+# Libraries
+from unittest import TestCase
 
+# Local
+import image_scraper
 
 class IntegrationTests(unittest.TestCase):
     """
