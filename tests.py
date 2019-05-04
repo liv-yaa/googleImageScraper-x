@@ -8,10 +8,21 @@ Integration Tests
 # Do we need to import os?
 
 # Libraries
+from unittest.mock import patch
 from unittest import TestCase
 
 # Local
 import image_scraper
+
+
+class TestInput(unittest.TestCase):
+    """
+    Tests if 
+
+    """
+
+
+
 
 class IntegrationTests(unittest.TestCase):
     """

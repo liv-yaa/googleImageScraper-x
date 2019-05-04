@@ -28,27 +28,35 @@ def process_input():
 
     TODO - input validation?
     """
-    arguments = sys.argv[1:]
 
-    if len(arguments) == 2:
+    while True:
+
+        try:
+            arguments = sys.argv[1:]
+
+            keyword = str(arguments[0])
+            n_items = int(arguments[1])
+
+            return [keyword, n_items]
+
+        except IndexError:
+            print('Please enter command with 4 args: \
+                \'python3 image_scraper.py \'keyword(s)\' \'number_of_items\'')
+            sys.exit(1)
+
+        except ValueError:
+            print('Second argument n_items must be an integer')
+            sys.exit(1)
 
 
-        for item in arguments:
-            print(item)
-
-        return arguments
-
-    else:
-        print('Please enter command with 4 args: \'python3 image_scraper.py keyword number_of_items\'')
-
-
-
-
-
+        # return False
 
 
 def main():
     arguments = process_input()
+
+    for arg in arguments:
+        print(arg)
 
 
 
