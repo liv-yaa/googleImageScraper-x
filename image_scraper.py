@@ -2,7 +2,8 @@
 Olivia Smith 05.04.2019
 Coding Challenge for Buzz Software Internship (Vikhyat Chaudhry)
 
-Write a query/program to scrap images from Google Images for the label specified and the number of images to be scraped and dowloaded specified.
+Write a query/program to scrap images from Google Images for the label specified 
+and the number of images to be scraped and dowloaded specified.
 Inputs: 
 1. Label of the type of images to be scraped (example power lines, dogs, cats, etc.)
 2. Number of images to be scraped and downloaded onto the local machine
@@ -14,13 +15,75 @@ Points would be awarded on coding style, commenting and a documentation of execu
 
 """
 import os
+import sys
 import requests
-# import beautifulsoup # ?
+from bs4 import BeautifulSoup
+import pandas as pd # To create dataframe
 
 
-# If we need a key?
-KEY = os.environ["KEY"]
-# clarifai_app = ClarifaiApp(api_key=CLARAFAI_KEY) # move this
+def process_input():
+    """
+    Helper function that takes command line arguments from user
+    @return arguments a list of arguments
+
+    TODO - input validation?
+    """
+    arguments = sys.argv[1:]
+
+    if len(arguments) == 2:
 
 
-print(KEY)
+        for item in arguments:
+            print(item)
+
+        return arguments
+
+    else:
+        print('Please enter command with 4 args: \'python3 image_scraper.py keyword number_of_items\'')
+
+
+
+
+
+
+
+def main():
+    arguments = process_input()
+
+
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
