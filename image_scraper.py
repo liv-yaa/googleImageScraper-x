@@ -48,7 +48,7 @@ class ImageScraper:
     def process_input(self):
         """
         Take a string of command line arguments from user
-        @return query a list of type [string, int] for keyword, int
+        @return query a list of type [string, int, url] for keyword, number, and search URL
 
         """
 
@@ -61,7 +61,12 @@ class ImageScraper:
                 n_items = int(arguments[1])
 
 
-                query = [keyword, n_items]
+                # Create a custom search url from keyword
+                url = self.generate_search_url(keyword)
+
+                query = [keyword, n_items, url]
+
+
                 return query 
 
             except IndexError:
@@ -75,25 +80,21 @@ class ImageScraper:
 
 
 
-    def generate_search_url(self, query):
+    def generate_search_url(self, term):
         """ Generates a URL for a given search term 
         @param query - a list of type [str, int]
         @return url - a str with the search term embedded in the image search URL
 
         """
-        term = query[0]
-        # n = query[1]
 
-        # TODO: Generate search url from term of query
         url = "https://www.google.co.in/search?q=" + term + "&source=lnms&tbm=isch"
-        print(url)
 
         return url
 
 
 
 
-    def get_n_items(self, url, term, n):
+    def get_n_items(self, query):
         """
         Download page and download images
         * I chose to use separate functions because timeout could occur *
@@ -102,6 +103,10 @@ class ImageScraper:
         @return all_items - a set of all image metadata
         
         """
+        # parse 
+        term = query[0]
+        n = query[1]
+        url = query[2]
 
 
         # Create a response object, using download_page helper function 
@@ -218,21 +223,21 @@ class ImageScraper:
 
 
 def main():
-    # args = sys.argv
+    # Instantiate an ImageScraper object
     imgScraper = ImageScraper(args=sys.argv)
 
-    # Process input and do input validation. @return query a list of type [string, int] for keyword, int
+    # Get query a list of type [string, int, url] for search term, num items, custom url
     query1 = imgScraper.process_input()
-    # print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
-    url1 = imgScraper.generate_search_url(query1)
-    print('url1', url1)
+    # Testing creating a custom URL
+    # url1 = imgScraper.generate_search_url(query1)
+    # print('url1', url1)
 
-    term = query1[0]
-    n = query1[1]
+    # term = query1[0]
+    # n = query1[1]
+    # url1 = query1[2]
 
-    print('n', n)
-    n_images_hashmap = imgScraper.get_n_items(url1, term, n)
+    n_images_hashmap = imgScraper.get_n_items(query1)
     # print('n_images_hashmap', n_images_hashmap)
 
 
