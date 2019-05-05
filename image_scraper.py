@@ -23,7 +23,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-import re
+# import re
 
 # Not used yet:
 # import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
@@ -193,6 +193,9 @@ class ImageScraper:
 
                 if 'http' in link:
                     print(link)
+
+                    with open(basename(link), 'wb') as f:
+                        f.write(requests.get(link).content)
 
 
 
