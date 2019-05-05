@@ -175,6 +175,9 @@ class ImageScraper:
 
         else:
             print('Folder already exists. ')
+
+
+            
         
 
         try:
@@ -185,12 +188,14 @@ class ImageScraper:
             # Open images and download them
             img_tags = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-            # counter = n
+            # Navigate to the directory with the name term
+            this_path = os.getcwd()
+            print('this_path', this_path)
 
-            # urls = [img['src'] for img in img_tags]
+            # Set save_path to new directory
+            save_path = this_path + '/' + term
+            print('save_path ', save_path)
 
-            # for url in urls:
-            #     print(url)
 
             for i in range(n):
                 print('i', i)
@@ -206,15 +211,14 @@ class ImageScraper:
                 # print('height', height)
                 # print('width', width)
 
+                # Create complete name
+                completeName = os.path.join(save_path, link + '.jpg')
+                print('completeName', completeName)
+
 
                 # print('link', link)
                 # x = len('https://encrypted-tbn0.gstatic.com/images?q=tbn:')
                 # print('link', link[x:])
-
-
-
-
-
 
 
                 if 'http' in link:
