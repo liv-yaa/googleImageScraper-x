@@ -196,7 +196,7 @@ class ImageScraper:
                 print('i', i)
                 img = img_tags[i]
 
-                print('img', img)
+                # print('img', img)
 
                 link = img.get('src') 
                 height = img.get('height') # TODO - save these as metadata, size, check size
@@ -205,6 +205,12 @@ class ImageScraper:
 
                 # print('height', height)
                 # print('width', width)
+
+
+                # print('link', link)
+                # x = len('https://encrypted-tbn0.gstatic.com/images?q=tbn:')
+                # print('link', link[x:])
+
 
 
 
@@ -217,11 +223,17 @@ class ImageScraper:
                     with open(basename(link), 'wb') as f:
 
                         f.write(requests.get(link).content)
-                        print('file uploaded')
+                        # print('file uploaded')
 
-                        print('f', f)
+                        print('f', type(f))
                         # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
                         print('f.name', f.name)
+                        print('f.raw', f.raw)
+                        print('f.readable', f.readable()) # False
+                        print('f.seekable', f.seekable()) # True
+                        print('f.writeable', f.writable()) # True
+
+
 
 
 
@@ -246,8 +258,12 @@ class ImageScraper:
 
 
 
+    def decode(self, string):
+        # Trying to decode base64 encryption
+        decoded_string = base64.b64decode(string)
+        print('decoded_string', decoded_string)
 
-
+        return decoded_string
     
 
 
@@ -268,6 +284,8 @@ def main():
     n_images_hashmap = imgScraper.get_n_items(url1_tuple, term)
     # print('n_images_hashmap', n_images_hashmap)
 
+
+    # decoded = imgScraper.decode("ANd9GcSrQtf0TW1sRZqoLXvlNDgDE3T92Pf8usC0QrgYD-DJ1UlLo9WMerlg0UWdQg")
 
 
 
