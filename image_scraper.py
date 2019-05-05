@@ -24,6 +24,8 @@ import requests
 from bs4 import BeautifulSoup
 from os.path  import basename
 
+import base64
+
 
 # import re
 
@@ -183,48 +185,49 @@ class ImageScraper:
             # Open images and download them
             img_tags = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
+            # counter = n
 
-            for tag in soup.find_all('meta'):
-                if tag.get('property', None) == 'og:title':
-                    print(tag.get('content', None))
-                elif tag.get('property', None) == 'og:url':
-                    print(tag.get('content', None))
+            # urls = [img['src'] for img in img_tags]
+
+            # for url in urls:
+            #     print(url)
+
+            for i in range(n):
+                print('i', i)
+                img = img_tags[i]
+
+                print('img', img)
+
+                link = img.get('src') 
+                height = img.get('height') # TODO - save these as metadata, size, check size
+                width = img.get('width')
+                alt = img.get('alt')
+
+                # print('height', height)
+                # print('width', width)
 
 
 
 
 
-            # for i in range(n):
-            #     print('i', i)
-            #     img = img_tags[i]
 
-            #     print('img', img)
+                if 'http' in link:
+                    # print(link)
 
-            #     link = img.get('src') 
-            #     height = img.get('height')
-            #     width = img.get('width')
-            #     alt = img.get('alt')
+                    with open(basename(link), 'wb') as f:
 
-            #     # print('height', height)
-            #     # print('width', width)
+                        f.write(requests.get(link).content)
+                        print('file uploaded')
 
-            #     if 'http' in link:
-            #         # print(link)
-
-            #         with open(basename(link), 'wb') as f:
-
-            #             f.write(requests.get(link).content)
-            #             print('file uploaded')
-
-            #             print('f', f)
-            #             # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
-            #             print('f.name', f.name)
+                        print('f', f)
+                        # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
+                        print('f.name', f.name)
 
 
 
                         # Create a more readable filename
                         # ugly = requests.get(link).content # Ugly filename - should we change?
-                        # readable = 
+                    
                         # os.rename(f, 'test' + i + '.jpg')
 
 
