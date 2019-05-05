@@ -89,9 +89,9 @@ class ImageScraper:
 
         print(url)
 
-        url_n_list = [url, n]
+        url_n_tuple = (url, n)
 
-        return url_n_list
+        return url_n_tuple
 
 
 
@@ -109,6 +109,9 @@ class ImageScraper:
         timeout = CONFIG['timeout']
         # print("timeout", timeout)
 
+        # Create a hashmap for storing image:metadata
+        n_items_hash = {}
+
         try:
             page = requests.get(url, timeout=timeout)
             print('response', page)
@@ -117,11 +120,38 @@ class ImageScraper:
 
         except:
             print("Could not open URL")
-            return "Page Not Found"
+            # return "Page Not Found"
+
+
+        return n_items_hash
+
+
+    ### HElper functions for get_n_items ###
+
+    def search_google(self, query):
+        """
+        @param query a list of type [string, int]
+        @return paths a set of URLS
+
+        TODO - input validation?
+        """
+
+
+        query_name = query[0]
+        query_size = query[1]
+
+        print(query_name)
+        print(query_size)
+
+        paths = set()
+
+        # for i in range(query_size):
+        #     paths.add(f'url {i}')
 
 
 
 
+        return paths
 
     def get_all_img_tags(self, page):
 
@@ -167,32 +197,22 @@ class ImageScraper:
 
 
 
-
-
-    def search_google(self, query):
+    ## Final step after get_n_items is download images to local dataframe
+    def download_to_dir(self, hashmap, term):
         """
-        @param query a list of type [string, int]
-        @return paths a set of URLS
+        @param hashmap has {image:metadata}
+        @param term is the search term
 
-        TODO - input validation?
+        * doesnt return anything *
+
+        Takes a hashmap, creates a file with the search term, and loads all files to it
+
+
+
         """
+        return None
 
-
-        query_name = query[0]
-        query_size = query[1]
-
-        print(query_name)
-        print(query_size)
-
-        paths = set()
-
-        # for i in range(query_size):
-        #     paths.add(f'url {i}')
-
-
-
-
-        return paths
+    
 
 
 
@@ -205,17 +225,12 @@ def main():
     query1 = imgScraper.process_input()
     print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
-    url1 = imgScraper.generate_search_url(query1)
-    print('url1_tuple', url1)
+    url1_tuple = imgScraper.generate_search_url(query1)
+    print('url1_tuple', url1_tuple)
 
 
-    # url2 = imgScraper.generate_search_url('s', 5)
-    # print('url2_tuple', url2)
-
-    # Perform a google search using search query in the format [string, int]
-    # results = imgScraper.search_google(query=query)
-
-    # print('results', results)
+    n_images_hashmap = imgScraper.get_n_items(url1_tuple)
+    print('n_images_hashmap', n_images_hashmap)
 
     # Test download page
     # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
