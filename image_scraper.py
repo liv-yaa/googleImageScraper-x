@@ -161,13 +161,10 @@ class ImageScraper:
             if response.status_code == 200:
 
                 # Create BS object from the response content
-                content = response.content
-                soup = BeautifulSoup(content, 'html.parser')
+                soup = BeautifulSoup(response.content, 'html.parser')
 
                 # Open images and download them
-                
-                imgs = soup.find_all('img')
-                                # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
+                imgs = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
                 for img in imgs:
                     link = img.get('src') 
