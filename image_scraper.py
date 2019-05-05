@@ -21,11 +21,12 @@ Points would be awarded on coding style, commenting and a documentation of execu
 import os
 import sys
 import requests
+import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
 from bs4 import BeautifulSoup
 import pandas as pd # To create dataframet
 
 # Local config file
-import config
+from config import CONFIG
 
 class ImageScraper:
 
@@ -43,7 +44,7 @@ class ImageScraper:
         @param url - a string
         @return page - a Response object
 
-        TODO - Threadin??
+        TODO - Threadin?
         """
         timeout = CONFIG['timeout']
         # print("timeout", timeout)
@@ -52,13 +53,14 @@ class ImageScraper:
             page = requests.get(url, timeout=timeout)
             print('response', page)
 
-            # page = response.read()
-            # print('page', page)
             return page
 
         except:
             print("Could not open URL")
             return "Page Not Found"
+
+
+    # def download_grequest(self, )
 
 
 
