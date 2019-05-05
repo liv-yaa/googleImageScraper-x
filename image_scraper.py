@@ -21,9 +21,11 @@ Points would be awarded on coding style, commenting and a documentation of execu
 import os
 import sys
 import requests
-import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
 from bs4 import BeautifulSoup
-import pandas as pd # To create dataframet
+
+# Not used yet:
+# import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
+# import pandas as pd # To create dataframe
 
 # Local config file
 from config import CONFIG
@@ -36,13 +38,65 @@ class ImageScraper:
         """
         self.args = args
         print('Initialized ImageScraper')
-        # pass
 
 
-    def download_page(self, url):
+    def process_input(self):
         """
-        @param url - a string
+        Take a string of command line arguments from user
+        @return query a list of type [string, int] for keyword, int
+
+        """
+
+        while True:
+
+            try:
+                arguments = self.args[1:]
+
+                keyword = str(arguments[0])
+                n_items = int(arguments[1])
+
+
+                query = [keyword, n_items]
+                return query 
+
+            except IndexError:
+                print('Please enter command with 4 args: \
+                    \'python3 image_scraper.py \'keyword(s)\' \'number_of_items\'')
+                sys.exit(1)
+
+            except ValueError:
+                print('Second argument n_items must be an integer')
+                sys.exit(1)
+
+
+
+    def generate_search_url(self, query):
+        """ Generates a URL for a given search term 
+        @ return url, a string
+        """
+        term = query[0]
+        n = query[1]
+
+        # TODO: Generate search url
+        url = "TEMPURL"
+        # url = 'https://www.google.com/search?q=' + quote(
+        #         search_term.encode('utf-8')) + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch' 
+        #         + params + '&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+
+        url_n_tuple = (url, n)
+
+        return url_n_tuple
+
+
+
+
+    def get_n_items(self, url_n_tuple):
+        """
+        @param url_n_tuple - a (string, int) tuple with the url and n 
         @return page - a Response object
+
+
+        SHOULD ACTUALLY RETURN A HASHMAP OR DATAFRAME
 
         TODO - Threadin?
         """
@@ -60,7 +114,6 @@ class ImageScraper:
             return "Page Not Found"
 
 
-    # def download_grequest(self, )
 
 
 
@@ -81,7 +134,7 @@ class ImageScraper:
                 # print('Type', [type(item) for item in list(soup.children)])
 
                 # getting an error when I try to get URL - ?
-
+ 
                 # html = list(soup.children)[2]
                 # children = list(html.children)
 
@@ -109,7 +162,7 @@ class ImageScraper:
 
 
 
-    def generate_search_url(self, term, identifier):
+    def generate_search_url(self, term):
         """ Generates a URL for a given search term 
         @ return url, a string
         """
@@ -121,34 +174,7 @@ class ImageScraper:
 
         # return url
 
-    def process_input(self):
-        """
-        Take a string of command line arguments from user
-        @return arguments a list of arguments of type [string, int]
 
-        TODO - input validation?
-        """
-
-        while True:
-
-            try:
-                arguments = self.args[1:]
-
-                keyword = str(arguments[0])
-                n_items = int(arguments[1])
-
-                # print('processed args are', [keyword, n_items])
-
-                return [keyword, n_items]
-
-            except IndexError:
-                print('Please enter command with 4 args: \
-                    \'python3 image_scraper.py \'keyword(s)\' \'number_of_items\'')
-                sys.exit(1)
-
-            except ValueError:
-                print('Second argument n_items must be an integer')
-                sys.exit(1)
 
 
     def search_google(self, query):
@@ -183,17 +209,19 @@ def main():
     # args = sys.argv
     imgScraper = ImageScraper(args=sys.argv)
 
-    # Process input and do input validation
+    # Process input and do input validation. @return query a list of type [string, int] for keyword, int
     query = imgScraper.process_input()
 
+    print('query', type(query[0]), type(query[1])) # <class 'str'> <class 'int'>
+
     # Perform a google search using search query in the format [string, int]
-    results = imgScraper.search_google(query=query)
+    # results = imgScraper.search_google(query=query)
 
     # print('results', results)
 
     # Test download page
-    page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
-    print('page1', page1)
+    # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
+    # print('page1', page1)
     # page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
     # print('page2', page2)
     # page3 = imgScraper.download_page('https://web.archive.org/web/20121007172955/https://www.nga.gov/collection/anZ1.htm')
