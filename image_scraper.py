@@ -183,38 +183,42 @@ class ImageScraper:
             # Open images and download them
             img_tags = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-            # counter = n
 
-            # urls = [img['src'] for img in img_tags]
+            for tag in soup.find_all('meta'):
+                if tag.get('property', None) == 'og:title':
+                    print(tag.get('content', None))
+                elif tag.get('property', None) == 'og:url':
+                    print(tag.get('content', None))
 
-            # for url in urls:
-            #     print(url)
 
-            for i in range(n):
-                print('i', i)
-                img = img_tags[i]
 
-                print('img', img)
 
-                link = img.get('src') 
-                height = img.get('height')
-                width = img.get('width')
-                alt = img.get('alt')
 
-                # print('height', height)
-                # print('width', width)
+            # for i in range(n):
+            #     print('i', i)
+            #     img = img_tags[i]
 
-                if 'http' in link:
-                    # print(link)
+            #     print('img', img)
 
-                    with open(basename(link), 'wb') as f:
+            #     link = img.get('src') 
+            #     height = img.get('height')
+            #     width = img.get('width')
+            #     alt = img.get('alt')
 
-                        f.write(requests.get(link).content)
-                        print('file uploaded')
+            #     # print('height', height)
+            #     # print('width', width)
 
-                        print('f', f)
-                        # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
-                        print('f.name', f.name)
+            #     if 'http' in link:
+            #         # print(link)
+
+            #         with open(basename(link), 'wb') as f:
+
+            #             f.write(requests.get(link).content)
+            #             print('file uploaded')
+
+            #             print('f', f)
+            #             # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
+            #             print('f.name', f.name)
 
 
 
