@@ -43,7 +43,6 @@ class ImageScraper:
         Create ImageScraper object, set string args to the instance
         """
         self.args = args
-        print('Initialized ImageScraper')
 
 
     def process_input(self):
@@ -78,34 +77,32 @@ class ImageScraper:
 
     def generate_search_url(self, query):
         """ Generates a URL for a given search term 
-        @ return url, a string
+        @param query - a list of type [str, int]
+        @return url - a str with the search term embedded in the image search URL
 
-        LATER COMBINE WITH ABOVE?? idk
         """
         term = query[0]
-        n = query[1]
+        # n = query[1]
 
         # TODO: Generate search url from term of query
         url = "https://www.google.co.in/search?q=" + term + "&source=lnms&tbm=isch"
         print(url)
 
-        return (url, n)
+        return url
 
 
 
 
-    def get_n_items(self, url_n_tuple, term):
+    def get_n_items(self, url, term, n):
         """
         Download page and download images
         * I chose to use separate functions because timeout could occur *
-        
+
         @param url_n_tuple - a (string, int) tuple with the url and n 
         @return all_items - a set of all image metadata
         
         """
 
-        url = url_n_tuple[0]
-        n = url_n_tuple[1]
 
         # Create a response object, using download_page helper function 
         resp = self.download_page(url)
@@ -228,11 +225,14 @@ def main():
     query1 = imgScraper.process_input()
     # print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
-    url1_tuple = imgScraper.generate_search_url(query1)
-    # print('url1_tuple', url1_tuple)
+    url1 = imgScraper.generate_search_url(query1)
+    print('url1', url1)
 
     term = query1[0]
-    n_images_hashmap = imgScraper.get_n_items(url1_tuple, term)
+    n = query1[1]
+
+    print('n', n)
+    n_images_hashmap = imgScraper.get_n_items(url1, term, n)
     # print('n_images_hashmap', n_images_hashmap)
 
 
