@@ -23,6 +23,8 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+import re
+
 # Not used yet:
 # import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
 # import pandas as pd # To create dataframe
@@ -152,6 +154,9 @@ class ImageScraper:
         # Does input validation and creates a BeautifulSoup object from Response object
         # Saves them all locally
         # Returns hashmap
+
+        extensions = CONFIG['extensions']
+
         # Create a hashmap for storing image:metadata
         n_items_hash = {}
 
@@ -172,16 +177,21 @@ class ImageScraper:
             soup = BeautifulSoup(response.content, 'html.parser')
 
             # Open images and download them
-            imgs = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
+            img_tags = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
             # counter = n
 
+            # urls = [img['src'] for img in img_tags]
+
+            # for url in urls:
+            #     print(url)
+
             for i in range(n):
                 print('i', i)
-                img = imgs[i]
+                img = img_tags[i]
                 link = img.get('src') 
 
-                if link:
+                if 'http' in link:
                     print(link)
 
 
