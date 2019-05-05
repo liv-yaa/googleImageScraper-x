@@ -152,6 +152,8 @@ class ImageScraper:
         # Does input validation and creates a BeautifulSoup object from Response object
         # Saves them all locally
         # Returns hashmap
+        # Create a hashmap for storing image:metadata
+        n_items_hash = {}
 
         print('term', term)
         print('n ', n)
@@ -159,11 +161,10 @@ class ImageScraper:
         # Create directory with term
         if not os.path.exists(term):
             os.mkdir(term)
-            print('Success')
+            print('Successfully made a folder named ', term)
 
 
-        # Create a hashmap for storing image:metadata
-        n_items_hash = {}
+        
 
         try:
 
@@ -173,11 +174,17 @@ class ImageScraper:
             # Open images and download them
             imgs = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-            for img in imgs:
+            # counter = n
+
+            for i in range(n):
+                print('i', i)
+                img = imgs[i]
                 link = img.get('src') 
 
                 if link:
                     print(link)
+
+
 
             print()
 
