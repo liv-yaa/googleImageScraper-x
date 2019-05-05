@@ -116,8 +116,11 @@ class ImageScraper:
 
 
         # Create a BeautifulSoup object from the Response obejct
-        soup = self.make_soup(resp)
-        print('soup object', soup.prettify())
+        # soup = self.make_soup(resp)
+        # print('soup object', soup.prettify())
+
+        # Download images
+        self.download_images(resp)
 
 
         # Create a hashmap for storing image:metadata
@@ -149,38 +152,29 @@ class ImageScraper:
 
 
     ### Helper function2 for get_n_items ###
-    def make_soup(self, response):
+    def download_images(self, response):
         # Does input validation and creates a BeautifulSoup object from Response object
+        # Saves them all locally
+        # Returns None
 
         try:
             if response.status_code == 200:
+
+                # Create BS object from the response content
                 content = response.content
-
-                # Use BeautifulSoup to parse the content
                 soup = BeautifulSoup(content, 'html.parser')
-                # print('Soup Prettify', soup.prettify())
 
-                # Create list of BS elements
-                tags = list(soup.children)
-                # print('Soup Children (tags)', tags)
-                # print('Type', [type(item) for item in list(soup.children)])
+                # Open images and download them
+                
+                imgs = soup.find_all('img')
+                                # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-                # getting an error when I try to get URL - ?
- 
-                # html = list(soup.children)[2]
-                # children = list(html.children)
+                for img in imgs:
+                    link = img.get('src') 
 
-                # print('children', children)
+                    if link:
+                        print(link)
 
-                # Pull all text from BodyText div
-                # artist_name_list = soup.find(class_='img')
-                # artist_name_list_items = artist_name_list.find_all('a')
-
-                # Create for loop to print out all artists' names
-                # for artist_name in artist_name_list_items:
-                #     print(artist_name.prettify())
-
-                return soup
                 print()
 
 
@@ -284,6 +278,25 @@ if __name__ == '__main__':
 
 
 
+# Create list of BS elements
+# tags = list(soup.children)
+# print('Soup Children (tags)', tags)
+# print('Type', [type(item) for item in list(soup.children)])
+
+# getting an error when I try to get URL - ?
+
+# html = list(soup.children)[2]
+# children = list(html.children)
+
+# print('children', children)
+
+# Pull all text from BodyText div
+# artist_name_list = soup.find(class_='img')
+# artist_name_list_items = artist_name_list.find_all('a')
+
+# Create for loop to print out all artists' names
+# for artist_name in artist_name_list_items:
+#     print(artist_name.prettify())
 
 
 
