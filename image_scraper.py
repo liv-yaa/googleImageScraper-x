@@ -229,11 +229,16 @@ class ImageScraper:
                         f.write(requests.get(link).content)
                         print('file uploaded')
 
-                        # Try adding metadata
-                        f.fileinfo = {'link' : str(img.get('src')), 
+                        # Size?
+                        size = os.path.getsize(os.path.join(save_path, basename(link)))
+                        print('size', size)
+
+                        # Try adding metadata https://stackoverflow.com/questions/41183819/python-add-custom-property-metadata-to-file
+                        f.fileinfo = {'src' : str(img.get('src')), 
                             'height' : str(img.get('height')), 
                             'width' : str(img.get('width')),
-                            'alt' : str(img.get('alt'))
+                            'alt' : str(img.get('alt')),
+                            'size' : str(size)
                             }
 
                         print('fileinfo',f.fileinfo)
