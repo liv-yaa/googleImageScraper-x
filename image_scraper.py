@@ -96,55 +96,47 @@ class ImageScraper:
 
     def get_n_items(self, url_n_tuple, term):
         """
+        Download page and download images
+        * I chose to use separate functions because timeout could occur *
+        
         @param url_n_tuple - a (string, int) tuple with the url and n 
-        @return page - a Response object
-
-
-        SHOULD ACTUALLY RETURN A HASHMAP OR DATAFRAME
-
+        @return all_items - a set of all image metadata
         
         """
-        print('term', term)
-
 
         url = url_n_tuple[0]
-        # print('term', term)
-
         n = url_n_tuple[1]
-        # print('n ', n)
 
-        # Create a response object, download page 
+        # Create a response object, using download_page helper function 
         resp = self.download_page(url)
-        # print('resp is', resp)
 
+        # Download images from response; Create a nested data structure to store metadata
+        all_items = self.download_images(resp, term, n)
 
-        # Download images from response; 
-        #Create a hashmap for storing image:metadata???
-        n_items_hash = self.download_images(resp, term, n)
-        print("n_items_hash",  n_items_hash)
+        return all_items
 
-        # return ?
 
 
 
     ### HElper function1 for get_n_items ###
     def download_page(self, url_string):
-        # Helper function for get_n_items - does it need self?
-        # Takes a string
-        # Returns a response object or None
+        """
+        Create a Response object via streamining; subject to timeout contstraints 
+
+        @param url_string - the url to download from
+
+        @return r - a Response object - or None
+        """
 
         timeout = CONFIG['timeout']
-        # print("timeout", timeout)
+
         try:
             # Create a Response object r via streaming and timeout
             r = requests.get(url_string, stream=True, timeout=timeout)
-            # print('r', r)
 
+            # Check for successful status code 200
             if r.status_code == 200:
-
-
                 return r
-
 
             else:
                 print(f'Download page error {r.status_code}')
@@ -154,19 +146,22 @@ class ImageScraper:
             return None
 
 
-    ### Helper function2 for get_n_items ###
     def download_images(self, response, term, n):
-        # Does input validation and creates a BeautifulSoup object from Response object
-        # Saves them all locally
-        # Returns hashmap
+        """
+        Parse a Response, create new directory, and add all files to folder.
+
+        @param response - a Response object containing the URL
+        @param term p]- the search term
+        @param n - number of items to return
+
+        @return n_items_set - a set of hashmaps containing file metadata (URL, size, alt text, height, width, and a unique identifier)
+        """
 
         extensions = CONFIG['extensions']
 
         # Create a hashmap for storing image:metadata
-        n_items_hash = {}
+        n_items_set = {}
 
-        print('term', term)
-        print('n ', n)
 
         # Create directory with term
         if not os.path.exists(term):
@@ -174,10 +169,7 @@ class ImageScraper:
             print('Successfully made a folder named ', term)
 
         else:
-            print('Folder already exists. ')
-
-
-            
+            print('Folder already exists. ')           
         
 
         try:
@@ -188,37 +180,16 @@ class ImageScraper:
             # Open images and download them
             img_tags = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-            # Navigate to the directory with the name term
-            this_path = os.getcwd()
-            print('this_path', this_path)
-
-            # Set save_path to new directory
-            save_path = this_path + '/' + term
-            print('save_path ', save_path)
+            # Set save_path to current directory / new directory
+            save_path = os.getcwd() + '/' + term
 
 
             for i in range(n):
-                print('i', i)
                 img = img_tags[i]
-
-                # print('img', img)
-
                 link = img.get('src') 
-                height = img.get('height') # TODO - save these as metadata, size, check size
-                width = img.get('width')
-                alt = img.get('alt')
-
-                # print('height', height)
-                # print('width', width)
 
                 # Create complete name
                 completeName = os.path.join(save_path, link + '.jpg')
-                print('completeName', completeName)
-
-
-                # print('link', link)
-                # x = len('https://encrypted-tbn0.gstatic.com/images?q=tbn:')
-                # print('link', link[x:])
 
 
                 if 'http' in link:
@@ -227,62 +198,24 @@ class ImageScraper:
                     with open(os.path.join(save_path, basename(link)), 'wb') as f:
 
                         f.write(requests.get(link).content)
-                        print('file uploaded')
 
-                        # Size?
-                        size = os.path.getsize(os.path.join(save_path, basename(link)))
-                        print('size', size)
-
-                        # Try adding metadata https://stackoverflow.com/questions/41183819/python-add-custom-property-metadata-to-file
+                        # Adding metadata https://stackoverflow.com/questions/41183819/python-add-custom-property-metadata-to-file
                         f.fileinfo = {'src' : str(img.get('src')), 
                             'height' : str(img.get('height')), 
                             'width' : str(img.get('width')),
                             'alt' : str(img.get('alt')),
-                            'size' : str(size)
+                            'size' : str(os.path.getsize(os.path.join(save_path, basename(link)))),
+                            'id' : i, # Arbitrary readable id
                             }
 
                         print('fileinfo',f.fileinfo)
-
-                        # print('f', type(f))
-                        # # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
-                        # print('f.name', f.name)
-                        # print('f.raw', f.raw)
-                        # print('f.readable', f.readable()) # False
-                        # print('f.seekable', f.seekable()) # True
-                        # print('f.writeable', f.writable()) # True
-
-
-
-
-
-                        # Create a more readable filename
-                        # ugly = requests.get(link).content # Ugly filename - should we change?
-                    
-                        # os.rename(f, 'test' + i + '.jpg')
-
-
-
-            print()
-
-
-
 
 
         except:
             print('Could not get page content')
 
 
-        return n_items_hash
-
-
-
-    def decode(self, string):
-        # Trying to decode base64 encryption
-        decoded_string = base64.b64decode(string)
-        print('decoded_string', decoded_string)
-
-        return decoded_string
-    
+        return n_items_set
 
 
 
@@ -395,12 +328,20 @@ if __name__ == '__main__':
 
 
 
+                        # Create a more readable filename? The name is encrypted :(
+                        # ugly = requests.get(link).content # Ugly filename - should we change?                    
+                        # os.rename(f, 'test' + i + '.jpg')
 
 
 
 
+    # def decode(self, string):
+    #     # Trying to decode base64 encryption
+    #     decoded_string = base64.b64decode(string)
+    #     print('decoded_string', decoded_string)
 
-
+    #     return decoded_string
+    
 
 
 
