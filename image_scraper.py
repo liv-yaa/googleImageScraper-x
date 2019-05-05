@@ -104,61 +104,57 @@ class ImageScraper:
 
         SHOULD ACTUALLY RETURN A HASHMAP OR DATAFRAME
 
-        TODO - Threadin?
+        
         """
-        timeout = CONFIG['timeout']
-        # print("timeout", timeout)
+        ### TODO - Get my custom URL to pass to download_page, which takes one arg. For now, it's not really working
+        # pagex = self.download_page(url_n_tuple[0])
+        # print('pagex is', pagex)
+
+        # Returns a response object
+        resp = self.download_page('https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887')
+        print('resp', resp)
+
+
+        # Create a BeautifulSoup object from the Response obejct
+        soup = self.make_soup(resp)
+        print('soup object', soup.prettify())
+
 
         # Create a hashmap for storing image:metadata
         n_items_hash = {}
 
-        try:
-            page = requests.get(url, timeout=timeout)
-            print('response', page)
 
-            return page
-
-        except:
-            print("Could not open URL")
-            # return "Page Not Found"
 
 
         return n_items_hash
 
 
-    ### HElper functions for get_n_items ###
+    ### HElper function1 for get_n_items ###
+    def download_page(self, url_string):
+        # Helper function for get_n_items - does it need self?
+        # Takes a string
+        # Returns a response object or None
 
-    def search_google(self, query):
-        """
-        @param query a list of type [string, int]
-        @return paths a set of URLS
-
-        TODO - input validation?
-        """
-
-
-        query_name = query[0]
-        query_size = query[1]
-
-        print(query_name)
-        print(query_size)
-
-        paths = set()
-
-        # for i in range(query_size):
-        #     paths.add(f'url {i}')
-
-
-
-
-        return paths
-
-    def get_all_img_tags(self, page):
-
-        # Do input validation if page
+        timeout = CONFIG['timeout']
+        # print("timeout", timeout)
         try:
-            if page.status_code == 200:
-                content = page.content
+            r = requests.get(url_string, timeout=timeout)
+            print('r', r)
+
+            return r
+
+        except:
+            print("Could not open URL")
+            return None
+
+
+    ### Helper function2 for get_n_items ###
+    def make_soup(self, response):
+        # Does input validation and creates a BeautifulSoup object from Response object
+
+        try:
+            if response.status_code == 200:
+                content = response.content
 
                 # Use BeautifulSoup to parse the content
                 soup = BeautifulSoup(content, 'html.parser')
@@ -166,7 +162,7 @@ class ImageScraper:
 
                 # Create list of BS elements
                 tags = list(soup.children)
-                print('Soup Children (tags)', tags)
+                # print('Soup Children (tags)', tags)
                 # print('Type', [type(item) for item in list(soup.children)])
 
                 # getting an error when I try to get URL - ?
@@ -197,7 +193,7 @@ class ImageScraper:
 
 
 
-    ## Final step after get_n_items is download images to local dataframe
+    ## Final step after get_n_items is download images to local dataframe. Might be a helper function? Not sure
     def download_to_dir(self, hashmap, term):
         """
         @param hashmap has {image:metadata}
@@ -223,14 +219,14 @@ def main():
 
     # Process input and do input validation. @return query a list of type [string, int] for keyword, int
     query1 = imgScraper.process_input()
-    print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
+    # print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
     url1_tuple = imgScraper.generate_search_url(query1)
-    print('url1_tuple', url1_tuple)
+    # print('url1_tuple', url1_tuple)
 
 
     n_images_hashmap = imgScraper.get_n_items(url1_tuple)
-    print('n_images_hashmap', n_images_hashmap)
+    # print('n_images_hashmap', n_images_hashmap)
 
     # Test download page
     # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
@@ -258,9 +254,30 @@ if __name__ == '__main__':
 
 
 
+# This didn't do much
+
+    # def search_google(self, query):
+    #     """
+    #     @param query a list of type [string, int]
+    #     @return paths a set of URLS
+
+    #     TODO - input validation?
+    #     """
 
 
+    #     query_name = query[0]
+    #     query_size = query[1]
 
+    #     print(query_name)
+    #     print(query_size)
+
+    #     paths = set()
+
+        # for i in range(query_size):
+        #     paths.add(f'url {i}')
+
+
+        # return paths
 
 
 
