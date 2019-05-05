@@ -134,8 +134,9 @@ class ImageScraper:
         timeout = CONFIG['timeout']
         # print("timeout", timeout)
         try:
-            r = requests.get(url_string, timeout=timeout)
-            print('r', r)
+            # Create a Response object r via streaming and timeout
+            r = requests.get(url_string, stream=True, timeout=timeout)
+            # print('r', r)
 
             if r.status_code == 200:
 
@@ -170,7 +171,8 @@ class ImageScraper:
             os.mkdir(term)
             print('Successfully made a folder named ', term)
 
-
+        else:
+            print('Folder already exists. ')
         
 
         try:
@@ -191,13 +193,35 @@ class ImageScraper:
             for i in range(n):
                 print('i', i)
                 img = img_tags[i]
+
+                print('img', img)
+
                 link = img.get('src') 
+                height = img.get('height')
+                width = img.get('width')
+                alt = img.get('alt')
+
+                # print('height', height)
+                # print('width', width)
 
                 if 'http' in link:
-                    print(link)
+                    # print(link)
 
                     with open(basename(link), 'wb') as f:
+
                         f.write(requests.get(link).content)
+                        print('file uploaded')
+
+                        print('f', f)
+                        # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
+                        print('f.name', f.name)
+
+
+
+                        # Create a more readable filename
+                        # ugly = requests.get(link).content # Ugly filename - should we change?
+                        # readable = 
+                        # os.rename(f, 'test' + i + '.jpg')
 
 
 
