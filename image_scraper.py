@@ -88,7 +88,7 @@ class ImageScraper:
 
 
 
-    def get_n_items(self, url_n_tuple):
+    def get_n_items(self, url_n_tuple, term):
         """
         @param url_n_tuple - a (string, int) tuple with the url and n 
         @return page - a Response object
@@ -98,15 +98,18 @@ class ImageScraper:
 
         
         """
-        # Create a response object, download page 
-        resp = self.download_page(url_n_tuple[0])
-        # print('resp is', resp)
-
-        term = url_n_tuple[0]
         print('term', term)
 
+
+        url = url_n_tuple[0]
+        # print('term', term)
+
         n = url_n_tuple[1]
-        print('n ', n)
+        # print('n ', n)
+
+        # Create a response object, download page 
+        resp = self.download_page(url)
+        # print('resp is', resp)
 
 
         # Download images from response; 
@@ -152,6 +155,11 @@ class ImageScraper:
 
         print('term', term)
         print('n ', n)
+
+        # Create directory with term
+        if not os.path.exists(term):
+            os.mkdir(term)
+            print('Success')
 
 
         # Create a hashmap for storing image:metadata
@@ -203,8 +211,8 @@ def main():
     url1_tuple = imgScraper.generate_search_url(query1)
     # print('url1_tuple', url1_tuple)
 
-
-    n_images_hashmap = imgScraper.get_n_items(url1_tuple)
+    term = query1[0]
+    n_images_hashmap = imgScraper.get_n_items(url1_tuple, term)
     # print('n_images_hashmap', n_images_hashmap)
 
 
