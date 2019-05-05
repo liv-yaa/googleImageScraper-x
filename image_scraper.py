@@ -23,15 +23,15 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 from os.path  import basename
+from skimage.transform import resize
 
-import base64
 
-
-# import re
 
 # Not used yet:
 # import grequests #https://github.com/kennethreitz/grequests/blob/master/grequests.py
 # import pandas as pd # To create dataframe
+# import base64
+# import re
 
 # Local config file
 from config import CONFIG
@@ -99,7 +99,7 @@ class ImageScraper:
         Download page and download images
         * I chose to use separate functions because timeout could occur *
 
-        @param url_n_tuple - a (string, int) tuple with the url and n 
+        @param query - a list of form [term, n, url]
         @return all_items - a set of all image metadata
         
         """
@@ -153,7 +153,7 @@ class ImageScraper:
         Parse a Response, create new directory, and add all files to folder.
 
         @param response - a Response object containing the URL
-        @param term p]- the search term
+        @param term p- the search term
         @param n - number of items to return
 
         @return n_items_set - a set of hashmaps containing file metadata (URL, size, alt text, height, width, and a unique identifier)
@@ -201,16 +201,20 @@ class ImageScraper:
 
                         f.write(requests.get(link).content)
 
+                        # Check if image needs to be resized
+                        size = os.path.getsize(os.path.join(save_path, basename(link)))
+                        print('size', size)
+
                         # Adding metadata https://stackoverflow.com/questions/41183819/python-add-custom-property-metadata-to-file
                         f.fileinfo = {'src' : str(img.get('src')), 
                             'height' : str(img.get('height')), 
                             'width' : str(img.get('width')),
                             'alt' : str(img.get('alt')),
-                            'size' : str(os.path.getsize(os.path.join(save_path, basename(link)))),
+                            'size' : str(size),
                             'id' : i, # Arbitrary readable id
                             }
 
-                        print('fileinfo',f.fileinfo)
+                        # print('fileinfo',f.fileinfo)
 
 
         except:
@@ -223,26 +227,13 @@ class ImageScraper:
 
 
 def main():
-    # Instantiate an ImageScraper object
     imgScraper = ImageScraper(args=sys.argv)
 
     # Get query a list of type [string, int, url] for search term, num items, custom url
     query1 = imgScraper.process_input()
 
-    # Testing creating a custom URL
-    # url1 = imgScraper.generate_search_url(query1)
-    # print('url1', url1)
-
-    # term = query1[0]
-    # n = query1[1]
-    # url1 = query1[2]
-
-    n_images_hashmap = imgScraper.get_n_items(query1)
-    # print('n_images_hashmap', n_images_hashmap)
-
-
-    # decoded = imgScraper.decode("ANd9GcSrQtf0TW1sRZqoLXvlNDgDE3T92Pf8usC0QrgYD-DJ1UlLo9WMerlg0UWdQg")
-
+    # Return nested data structure with metadata
+    return imgScraper.get_n_items(query1)
 
 
 
@@ -251,101 +242,19 @@ if __name__ == '__main__':
 
 
 
-## Final step after get_n_items is download images to local dataframe. Might be a helper function? Not sure
-# def download_to_dir(self, hashmap, term):
-    #     """
-    #     @param hashmap has {image:metadata}
-    #     @param term is the search term
+# Hi Vikhyat, here are some 'Trashed' ideas :)
 
-    #     * doesnt return anything *
-
-    #     Takes a hashmap, creates a file with the search term, and loads all files to it
+# Create a more readable filename? The name is encrypted :(
+# ugly = requests.get(link).content # Ugly filename - should we change?                    
+# os.rename(f, 'test' + i + '.jpg')
 
 
 
-    #     """
-    #     return None
-
-
-
-# This didn't do much
-
-    # def search_google(self, query):
-    #     """
-    #     @param query a list of type [string, int]
-    #     @return paths a set of URLS
-
-    #     TODO - input validation?
-    #     """
-
-
-    #     query_name = query[0]
-    #     query_size = query[1]
-
-    #     print(query_name)
-    #     print(query_size)
-
-    #     paths = set()
-
-        # for i in range(query_size):
-        #     paths.add(f'url {i}')
-
-
-        # return paths
-
-
-
-
-
-
-# Create list of BS elements
-# tags = list(soup.children)
-# print('Soup Children (tags)', tags)
-# print('Type', [type(item) for item in list(soup.children)])
-
-# getting an error when I try to get URL - ?
-
-# html = list(soup.children)[2]
-# children = list(html.children)
-
-# print('children', children)
-
-# Pull all text from BodyText div
-# artist_name_list = soup.find(class_='img')
-# artist_name_list_items = artist_name_list.find_all('a')
-
-# Create for loop to print out all artists' names
-# for artist_name in artist_name_list_items:
-#     print(artist_name.prettify())
-
-
-
-
-
-    # Test download page
-    # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
-    # print('page1', page1)
-    # page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
-    # print('page2', page2)
-    # page3 = imgScraper.download_page('https://web.archive.org/web/20121007172955/https://www.nga.gov/collection/anZ1.htm')
-    # print('page3', page3)
-
-
-
-
-                        # Create a more readable filename? The name is encrypted :(
-                        # ugly = requests.get(link).content # Ugly filename - should we change?                    
-                        # os.rename(f, 'test' + i + '.jpg')
-
-
-
-
-    # def decode(self, string):
-    #     # Trying to decode base64 encryption
-    #     decoded_string = base64.b64decode(string)
-    #     print('decoded_string', decoded_string)
-
-    #     return decoded_string
+#     # Trying to decode base64 encryption but Google has a lock!
+# def decode(self, string):
+#     decoded_string = base64.b64decode(string)
+#     print('decoded_string', decoded_string)
+#     return decoded_string
     
 
 
