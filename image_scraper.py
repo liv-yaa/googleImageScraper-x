@@ -102,13 +102,16 @@ class ImageScraper:
         resp = self.download_page(url_n_tuple[0])
         # print('resp is', resp)
 
+        term = url_n_tuple[0]
+        print('term', term)
+
         n = url_n_tuple[1]
         print('n ', n)
 
 
         # Download images from response; 
         #Create a hashmap for storing image:metadata???
-        n_items_hash = self.download_images(resp, n)
+        n_items_hash = self.download_images(resp, term, n)
         print("n_items_hash",  n_items_hash)
 
         # return ?
@@ -142,11 +145,12 @@ class ImageScraper:
 
 
     ### Helper function2 for get_n_items ###
-    def download_images(self, response, n):
+    def download_images(self, response, term, n):
         # Does input validation and creates a BeautifulSoup object from Response object
         # Saves them all locally
         # Returns hashmap
 
+        print('term', term)
         print('n ', n)
 
 
@@ -181,20 +185,7 @@ class ImageScraper:
 
 
 
-    ## Final step after get_n_items is download images to local dataframe. Might be a helper function? Not sure
-    # def download_to_dir(self, hashmap, term):
-    #     """
-    #     @param hashmap has {image:metadata}
-    #     @param term is the search term
 
-    #     * doesnt return anything *
-
-    #     Takes a hashmap, creates a file with the search term, and loads all files to it
-
-
-
-    #     """
-    #     return None
 
     
 
@@ -222,6 +213,23 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+## Final step after get_n_items is download images to local dataframe. Might be a helper function? Not sure
+# def download_to_dir(self, hashmap, term):
+    #     """
+    #     @param hashmap has {image:metadata}
+    #     @param term is the search term
+
+    #     * doesnt return anything *
+
+    #     Takes a hashmap, creates a file with the search term, and loads all files to it
+
+
+
+    #     """
+    #     return None
 
 
 
