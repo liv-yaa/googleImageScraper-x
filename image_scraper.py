@@ -22,7 +22,10 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd # To create dataframe
+import pandas as pd # To create dataframet
+
+# Local config file
+from config import CONFIG
 
 class ImageScraper:
 
@@ -40,11 +43,13 @@ class ImageScraper:
         @param url - a string
         @return page - a Response object
 
-        TODO - input validation?
+        TODO - TIMEOUT!
         """
+        timeout = CONFIG['timeout']
+        # print("timeout", timeout)
 
         try:
-            page = requests.get(url)
+            page = requests.get(url, timeout=timeout)
             print('response', page)
 
             # page = response.read()
@@ -71,7 +76,7 @@ class ImageScraper:
                 # Create list of BS elements
                 tags = list(soup.children)
                 print('Soup Children (tags)', tags)
-                print('Type', [type(item) for item in list(soup.children)])
+                # print('Type', [type(item) for item in list(soup.children)])
 
                 # getting an error when I try to get URL - ?
 
@@ -80,7 +85,15 @@ class ImageScraper:
 
                 # print('children', children)
 
-                # return content
+                # Pull all text from BodyText div
+                # artist_name_list = soup.find(class_='img')
+                # artist_name_list_items = artist_name_list.find_all('a')
+
+                # Create for loop to print out all artists' names
+                # for artist_name in artist_name_list_items:
+                #     print(artist_name.prettify())
+
+                return soup
                 print()
 
 
@@ -94,11 +107,17 @@ class ImageScraper:
 
 
 
-    def generate_url(self, term, identifier):
-        """ Generates a unique URL for a given id and search term """
+    def generate_search_url(self, term, identifier):
+        """ Generates a URL for a given search term 
+        @ return url, a string
+        """
+        params = 'X' # FILL IN!!
 
-        # return (f"www.google.com/{term}/{identifier}")
-        pass
+        # url = 'https://www.google.com/search?q=' + quote(
+        #         search_term.encode('utf-8')) + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch' 
+        #         + params + '&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+
+        # return url
 
     def process_input(self):
         """
@@ -172,17 +191,22 @@ def main():
 
     # Test download page
     page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
-    # print('page1', page1)
-    page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
+    print('page1', page1)
+    # page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
     # print('page2', page2)
+    # page3 = imgScraper.download_page('https://web.archive.org/web/20121007172955/https://www.nga.gov/collection/anZ1.htm')
+    # print('page3', page3)
+
 
     # Parse contents from page
-    contents1 = imgScraper.get_all_img_tags(page1)
-    print('contents1', contents1)
-    print()
-    print()
-    contents2 = imgScraper.get_all_img_tags(page2)
-    print('contents2', contents2)
+    # contents1 = imgScraper.get_all_img_tags(page1)
+    # print('contents1', contents1)
+    # print()
+    # print()
+    # contents2 = imgScraper.get_all_img_tags(page2)
+    # print('contents2', contents2)
+    # contents3 = imgScraper.get_all_img_tags(page3)
+    # print('contents3', contents3)
 
 
 
