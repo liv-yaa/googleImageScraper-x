@@ -127,7 +127,14 @@ class ImageScraper:
             r = requests.get(url_string, timeout=timeout)
             print('r', r)
 
-            return r
+            if r.status_code == 200:
+
+
+                return r
+
+
+            else:
+                print(f'Download page error {r.status_code}')
 
         except:
             print("Could not open URL")
@@ -147,28 +154,24 @@ class ImageScraper:
         n_items_hash = {}
 
         try:
-            if response.status_code == 200:
 
-                # Create BS object from the response content
-                soup = BeautifulSoup(response.content, 'html.parser')
+            # Create BS object from the response content
+            soup = BeautifulSoup(response.content, 'html.parser')
 
-                # Open images and download them
-                imgs = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
+            # Open images and download them
+            imgs = soup.find_all('img')            # Got a hint here for this line: https://stackoverflow.com/questions/35439110/scraping-google-images-with-python3-requests-beautifulsoup                imgs = soup.find_all('div', {'class': 'thumb-pic'})
 
-                for img in imgs:
-                    link = img.get('src') 
+            for img in imgs:
+                link = img.get('src') 
 
-                    if link:
-                        print(link)
+                if link:
+                    print(link)
 
-                print()
-
+            print()
 
 
 
 
-            else:
-                print(f'Download page error {page.status_code}')
 
         except:
             print('Could not get page content')
