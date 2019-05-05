@@ -73,24 +73,17 @@ class ImageScraper:
     def generate_search_url(self, query):
         """ Generates a URL for a given search term 
         @ return url, a string
+
+        LATER COMBINE WITH ABOVE?? idk
         """
-        # return 'x'
         term = query[0]
         n = query[1]
 
-        print(term, "...", n)
-
-
-        # TODO: Generate search url
-        # url = "TEMPURL" + term
-        
+        # TODO: Generate search url from term of query
         url = "https://www.google.co.in/search?q=" + term + "&source=lnms&tbm=isch"
-
         print(url)
 
-        url_n_tuple = (url, n)
-
-        return url_n_tuple
+        return (url, n)
 
 
 
@@ -105,30 +98,21 @@ class ImageScraper:
 
         
         """
-        ### TODO - Get my custom URL to pass to download_page, which takes one arg. For now, it's not really working
-        # pagex = self.download_page(url_n_tuple[0])
-        # print('pagex is', pagex)
+        # Create a response object, download page 
+        resp = self.download_page(url_n_tuple[0])
+        # print('resp is', resp)
 
-        # Returns a response object
-        resp = self.download_page('https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887')
-        print('resp', resp)
-
-
-        # Create a BeautifulSoup object from the Response obejct
-        # soup = self.make_soup(resp)
-        # print('soup object', soup.prettify())
-
-        # Download images
-        self.download_images(resp)
+        n = url_n_tuple[1]
+        print('n ', n)
 
 
-        # Create a hashmap for storing image:metadata
-        n_items_hash = {}
+        # Download images from response; 
+        #Create a hashmap for storing image:metadata???
+        n_items_hash = self.download_images(resp, n)
+        print("n_items_hash",  n_items_hash)
 
+        # return ?
 
-
-
-        return n_items_hash
 
 
     ### HElper function1 for get_n_items ###
@@ -151,10 +135,16 @@ class ImageScraper:
 
 
     ### Helper function2 for get_n_items ###
-    def download_images(self, response):
+    def download_images(self, response, n):
         # Does input validation and creates a BeautifulSoup object from Response object
         # Saves them all locally
-        # Returns None
+        # Returns hashmap
+
+        print('n ', n)
+
+
+        # Create a hashmap for storing image:metadata
+        n_items_hash = {}
 
         try:
             if response.status_code == 200:
@@ -175,6 +165,8 @@ class ImageScraper:
 
 
 
+
+
             else:
                 print(f'Download page error {page.status_code}')
 
@@ -182,21 +174,24 @@ class ImageScraper:
             print('Could not get page content')
 
 
+        return n_items_hash
+
+
 
     ## Final step after get_n_items is download images to local dataframe. Might be a helper function? Not sure
-    def download_to_dir(self, hashmap, term):
-        """
-        @param hashmap has {image:metadata}
-        @param term is the search term
+    # def download_to_dir(self, hashmap, term):
+    #     """
+    #     @param hashmap has {image:metadata}
+    #     @param term is the search term
 
-        * doesnt return anything *
+    #     * doesnt return anything *
 
-        Takes a hashmap, creates a file with the search term, and loads all files to it
+    #     Takes a hashmap, creates a file with the search term, and loads all files to it
 
 
 
-        """
-        return None
+    #     """
+    #     return None
 
     
 
@@ -209,10 +204,10 @@ def main():
 
     # Process input and do input validation. @return query a list of type [string, int] for keyword, int
     query1 = imgScraper.process_input()
-    print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
+    # print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
     url1_tuple = imgScraper.generate_search_url(query1)
-    print('url1_tuple', url1_tuple)
+    # print('url1_tuple', url1_tuple)
 
 
     n_images_hashmap = imgScraper.get_n_items(url1_tuple)
