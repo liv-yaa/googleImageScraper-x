@@ -222,12 +222,23 @@ class ImageScraper:
 
 
                 if 'http' in link:
-                    # print(link)
 
+                    # https://stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac/8024254
                     with open(os.path.join(save_path, basename(link)), 'wb') as f:
 
                         f.write(requests.get(link).content)
                         print('file uploaded')
+
+                        # Try adding metadata
+                        f_info = {'link' : str(img.get('src')), 
+                            'height' : str(img.get('height')), 
+                            'width' : str(img.get('width')),
+                            'alt' : str(img.get('alt'))
+                            }
+
+
+                        f.fileinfo = f_info
+                        print('fileinfo',f.fileinfo)
 
                         # print('f', type(f))
                         # # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
