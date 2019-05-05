@@ -74,18 +74,24 @@ class ImageScraper:
         """ Generates a URL for a given search term 
         @ return url, a string
         """
+        # return 'x'
         term = query[0]
         n = query[1]
 
+        print(term, "...", n)
+
+
         # TODO: Generate search url
-        url = "TEMPURL"
+        url = "TEMPURL" + term
         # url = 'https://www.google.com/search?q=' + quote(
         #         search_term.encode('utf-8')) + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch' 
         #         + params + '&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
 
-        url_n_tuple = (url, n)
+        print(url)
 
-        return url_n_tuple
+        url_n_list = [url, n]
+
+        return url_n_list
 
 
 
@@ -162,20 +168,6 @@ class ImageScraper:
 
 
 
-    def generate_search_url(self, term):
-        """ Generates a URL for a given search term 
-        @ return url, a string
-        """
-        params = 'X' # FILL IN!!
-
-        # url = 'https://www.google.com/search?q=' + quote(
-        #         search_term.encode('utf-8')) + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch' 
-        #         + params + '&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
-
-        # return url
-
-
-
 
     def search_google(self, query):
         """
@@ -210,9 +202,15 @@ def main():
     imgScraper = ImageScraper(args=sys.argv)
 
     # Process input and do input validation. @return query a list of type [string, int] for keyword, int
-    query = imgScraper.process_input()
+    query1 = imgScraper.process_input()
+    print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
-    print('query', type(query[0]), type(query[1])) # <class 'str'> <class 'int'>
+    url1 = imgScraper.generate_search_url(query1)
+    print('url1_tuple', url1)
+
+
+    # url2 = imgScraper.generate_search_url('s', 5)
+    # print('url2_tuple', url2)
 
     # Perform a google search using search query in the format [string, int]
     # results = imgScraper.search_google(query=query)
