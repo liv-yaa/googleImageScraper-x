@@ -224,18 +224,18 @@ class ImageScraper:
                 if 'http' in link:
                     # print(link)
 
-                    with open(basename(link), 'wb') as f:
+                    with open(os.path.join(save_path, basename(link)), 'wb') as f:
 
                         f.write(requests.get(link).content)
-                        # print('file uploaded')
+                        print('file uploaded')
 
-                        print('f', type(f))
-                        # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
-                        print('f.name', f.name)
-                        print('f.raw', f.raw)
-                        print('f.readable', f.readable()) # False
-                        print('f.seekable', f.seekable()) # True
-                        print('f.writeable', f.writable()) # True
+                        # print('f', type(f))
+                        # # print('f', dir(f)) # 'close', 'closed', 'detach', 'fileno', 'flush', 'isatty', 'mode', 'name', 'raw', 'read', 'read1', 'readable', 'readinto', 'readinto1', 'readline', 'readlines', 'seek', 'seekable', 'tell', 'truncate', 'writable', 'write', 'writelines'
+                        # print('f.name', f.name)
+                        # print('f.raw', f.raw)
+                        # print('f.readable', f.readable()) # False
+                        # print('f.seekable', f.seekable()) # True
+                        # print('f.writeable', f.writable()) # True
 
 
 
