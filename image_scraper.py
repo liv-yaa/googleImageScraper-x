@@ -230,14 +230,12 @@ class ImageScraper:
                         print('file uploaded')
 
                         # Try adding metadata
-                        f_info = {'link' : str(img.get('src')), 
+                        f.fileinfo = {'link' : str(img.get('src')), 
                             'height' : str(img.get('height')), 
                             'width' : str(img.get('width')),
                             'alt' : str(img.get('alt'))
                             }
 
-
-                        f.fileinfo = f_info
                         print('fileinfo',f.fileinfo)
 
                         # print('f', type(f))
