@@ -25,7 +25,7 @@ from bs4 import BeautifulSoup
 import pandas as pd # To create dataframet
 
 # Local config file
-from config import CONFIG
+import config
 
 class ImageScraper:
 
@@ -43,7 +43,7 @@ class ImageScraper:
         @param url - a string
         @return page - a Response object
 
-        TODO - TIMEOUT!
+        TODO - Threadin??
         """
         timeout = CONFIG['timeout']
         # print("timeout", timeout)
