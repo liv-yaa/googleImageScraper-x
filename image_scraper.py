@@ -82,10 +82,9 @@ class ImageScraper:
 
 
         # TODO: Generate search url
-        url = "TEMPURL" + term
-        # url = 'https://www.google.com/search?q=' + quote(
-        #         search_term.encode('utf-8')) + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch' 
-        #         + params + '&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+        # url = "TEMPURL" + term
+        
+        url = "https://www.google.co.in/search?q=" + term + "&source=lnms&tbm=isch"
 
         print(url)
 
@@ -210,33 +209,16 @@ def main():
 
     # Process input and do input validation. @return query a list of type [string, int] for keyword, int
     query1 = imgScraper.process_input()
-    # print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
+    print('query1', query1, type(query1[0]), type(query1[1])) # list: [<class 'str'>, <class 'int'>]
 
     url1_tuple = imgScraper.generate_search_url(query1)
-    # print('url1_tuple', url1_tuple)
+    print('url1_tuple', url1_tuple)
 
 
     n_images_hashmap = imgScraper.get_n_items(url1_tuple)
     # print('n_images_hashmap', n_images_hashmap)
 
-    # Test download page
-    # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
-    # print('page1', page1)
-    # page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
-    # print('page2', page2)
-    # page3 = imgScraper.download_page('https://web.archive.org/web/20121007172955/https://www.nga.gov/collection/anZ1.htm')
-    # print('page3', page3)
 
-
-    # Parse contents from page
-    # contents1 = imgScraper.get_all_img_tags(page1)
-    # print('contents1', contents1)
-    # print()
-    # print()
-    # contents2 = imgScraper.get_all_img_tags(page2)
-    # print('contents2', contents2)
-    # contents3 = imgScraper.get_all_img_tags(page3)
-    # print('contents3', contents3)
 
 
 
@@ -299,7 +281,13 @@ if __name__ == '__main__':
 
 
 
-
+    # Test download page
+    # page1 = imgScraper.download_page("http://dataquestio.github.io/web-scraping-pages/simple.html")
+    # print('page1', page1)
+    # page2 = imgScraper.download_page("https://www.google.com/search?q=fork&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiQ4oPtkIPiAhUYrZ4KHVmKAygQ_AUIDigB&biw=445&bih=887")
+    # print('page2', page2)
+    # page3 = imgScraper.download_page('https://web.archive.org/web/20121007172955/https://www.nga.gov/collection/anZ1.htm')
+    # print('page3', page3)
 
 
 
