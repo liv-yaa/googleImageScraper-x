@@ -2,8 +2,9 @@
 
 #### Description
 
-A query that scrapes images from Google Images for the label specified and the number of images to be scraped and dowloaded specified. Stores them in a local folder with the name of the search query.
-Given:
+A tool that scrapes images from Google Images for the label specified and the number of images to be scraped and dowloaded specified. It then stores them in a local folder with the name of the search query.
+
+Arguments:
 - Label of the type of images to be scraped (example power lines, dogs, cats, etc.)
 - Number of images to be scraped and downloaded onto the local machine
 
@@ -26,7 +27,7 @@ Given:
 - os
 - sys
 
-#### Overview
+#### How it works
 1. Using sys, command line args are parsed, if valid
 2. A search term is generated for google using string formatting with the query name
 3. Using Requests, the page is downloaded via a GET request, with a timer configured to halt the process if it takes too long
