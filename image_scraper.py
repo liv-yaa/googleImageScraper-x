@@ -1,7 +1,5 @@
 """
 Olivia Smith 05.04.2019
-Coding Challenge for Buzz Software Internship (Vikhyat Chaudhry)
-
 Write a query/program to scrap images from Google Images for the label specified 
 and the number of images to be scraped and dowloaded specified.
 Inputs: 
