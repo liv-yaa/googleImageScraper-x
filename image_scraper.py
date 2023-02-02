@@ -240,7 +240,7 @@ if __name__ == '__main__':
 
 
 
-# Hi Vikhyat, here are some 'Trashed' ideas :)
+# Here are some 'Trashed' ideas :)
 
 # Create a more readable filename? The name is encrypted :(
 # ugly = requests.get(link).content # Ugly filename - should we change?                    
